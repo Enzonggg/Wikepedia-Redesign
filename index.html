@@ -1,0 +1,200 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- cleaned duplicated doctype/html/head -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wikipedia — Readable Redesign (Student Project)</title>
+    <meta name="description" content="An accessible, clean redesign concept for Wikipedia’s landing page. Focused on readability and simple navigation." />
+    <style>
+      :root{
+        --bg:#f7f8fb;
+        --surface:#ffffff;
+        --surface-2:#f2f4f8;
+        --text:#101418;
+        --muted:#3c4654;
+        --link:#0645ad;
+        --control:#ffffff;
+        --control-border:#d5d9e1;
+        --accent:#2563eb;
+        --focus:#ffbf47;
+      }
+      /* Respect system dark mode by default; allow manual override via [data-theme] */
+      @media (prefers-color-scheme: dark){
+        :root:not([data-theme="light"]){
+          --bg:#0f1115; --surface:#12161d; --surface-2:#161b22;
+          --text:#e7eaf0; --muted:#a0abba; --link:#93b4ff;
+          --control:#161b22; --control-border:#2a3446; --accent:#3b82f6; --focus:#ffbf47;
+        }
+      }
+      :root[data-theme="dark"]{
+        --bg:#0f1115; --surface:#12161d; --surface-2:#161b22;
+        --text:#e7eaf0; --muted:#a0abba; --link:#93b4ff;
+        --control:#161b22; --control-border:#2a3446; --accent:#3b82f6; --focus:#ffbf47;
+      }
+      * { box-sizing:border-box; }
+      html { scroll-behavior:smooth; }
+      body{ margin:0; background:var(--bg); color:var(--text); font: 18px/1.7 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+      a{ color:var(--link); text-decoration:none; }
+      a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+      .skip{ position:absolute; left:-9999px; top:auto; }
+      .skip:focus{ left:12px; top:12px; background:#fff; padding:8px 12px; border:2px solid var(--focus); z-index:1000; }
+
+      .container{ max-width: 1080px; margin:0 auto; padding: 20px 16px; }
+      header.header{ padding:22px 0 10px; }
+    .brand{ display:flex; align-items:center; gap:12px; }
+      .brand h1{ margin:0; font-size:2rem; letter-spacing:0.5px; }
+      .brand p{ margin:0; color:var(--muted); }
+    .spacer{ flex:1; }
+    .toggle{ background:var(--surface-2); border:1px solid var(--control-border); color:var(--text); padding:8px 12px; border-radius:10px; cursor:pointer; font-size:0.95rem; }
+    .toggle[aria-pressed="true"]{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+      .hero{ background:var(--surface); border:1px solid var(--control-border); border-radius:14px; padding:18px; display:grid; grid-template-columns: 1.4fr 1fr; gap:16px; }
+      @media (max-width: 900px){ .hero{ grid-template-columns: 1fr; } }
+  .hero h2{ margin:0 0 6px; font-size:1.5rem; }
+  .hero p{ margin:0; color:var(--muted); }
+
+      .search form{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+      .search label{ font-weight:700; }
+      .search input[type="search"]{ flex:1 1 420px; min-width:220px; padding:12px 14px; border-radius:10px; border:1px solid var(--control-border); background:var(--control); font-size:1rem; }
+      .search select{ flex:0 0 140px; padding:12px 14px; border-radius:10px; border:1px solid var(--control-border); background:var(--control); font-size:1rem; }
+      .btn{ background:var(--accent); color:#fff; border:none; padding:12px 16px; border-radius:10px; font-size:1rem; cursor:pointer; }
+
+      main.main{ display:grid; grid-template-columns: 1.1fr 1fr; gap:16px; margin-top:16px; }
+      @media (max-width: 900px){ main.main{ grid-template-columns: 1fr; } }
+
+      .panel{ background:var(--surface); border:1px solid var(--control-border); border-radius:14px; padding:16px; }
+      .panel h3{ margin:0 0 8px; }
+      .panel p{ margin:0 0 10px; color:var(--muted); }
+
+    .lang-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:12px; }
+    .lang{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; background:var(--surface-2); border:1px solid var(--control-border); border-radius:12px; text-decoration:none; color:inherit; }
+    .lang .name{ font-weight:700; font-size:1.05rem; }
+    .lang .count{ color:var(--muted); font-size:1rem; }
+    .lang:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+
+      footer{ color:var(--muted); text-align:center; padding:24px 0 32px; }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+
+    <header class="header container" role="banner">
+      <div class="brand">
+        <h1>Wikipedia</h1>
+        <p>The free encyclopedia, redesigned for readability</p>
+        <span class="spacer" aria-hidden="true"></span>
+        <button id="theme-toggle" class="toggle" type="button" aria-pressed="false" aria-label="Toggle dark theme">Dark mode</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="hero" aria-labelledby="discover">
+        <div>
+          <h2 id="discover">Discover knowledge</h2>
+          <p>Search millions of articles across hundreds of languages. Clear structure, large type, and strong contrast make this version easier to read and navigate.</p>
+        </div>
+        <div class="search" aria-labelledby="search-label">
+          <h3 id="search-label">Search Wikipedia</h3>
+          <form action="#" method="get" role="search">
+            <label class="vis" for="q">Search term</label>
+            <input id="q" name="search" type="search" placeholder="Search articles" autocomplete="off" required />
+            <label class="vis" for="lang">Language</label>
+            <select id="lang" name="lang" aria-label="Language">
+              <option value="en" selected>English</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+              <option value="ja">日本語</option>
+            </select>
+            <button class="btn" type="submit">Search</button>
+          </form>
+        </div>
+      </section>
+
+      <main id="main" class="main" role="main">
+        <section class="panel" aria-labelledby="browse-langs">
+          <h3 id="browse-langs">Browse by language</h3>
+          <div class="lang-grid">
+            <a class="lang" href="#" aria-label="English — six million plus articles">
+              <span class="name">English</span>
+              <span class="count">6,000,000+ articles</span>
+            </a>
+            <a class="lang" href="#" aria-label="Español — one point eight million plus artículos">
+              <span class="name">Español</span>
+              <span class="count">1,800,000+ artículos</span>
+            </a>
+            <a class="lang" href="#" aria-label="Deutsch — two point eight million plus Artikel">
+              <span class="name">Deutsch</span>
+              <span class="count">2,800,000+ Artikel</span>
+            </a>
+            <a class="lang" href="#" aria-label="Français — two point five million plus articles">
+              <span class="name">Français</span>
+              <span class="count">2,500,000+ articles</span>
+            </a>
+            <a class="lang" href="#" aria-label="日本語 — one point four million plus 記事">
+              <span class="name">日本語</span>
+              <span class="count">1,400,000+ 記事</span>
+            </a>
+            <a class="lang" href="#" aria-label="中文 — one point one million plus 条目">
+              <span class="name">中文</span>
+              <span class="count">1,100,000+ 条目</span>
+            </a>
+            <a class="lang" href="#" aria-label="Português — one point one million plus artigos">
+              <span class="name">Português</span>
+              <span class="count">1,100,000+ artigos</span>
+            </a>
+            <a class="lang" href="#" aria-label="Русский — one point eight million plus статей">
+              <span class="name">Русский</span>
+              <span class="count">1,800,000+ статей</span>
+            </a>
+          </div>
+        </section>
+
+        <aside class="panel" aria-labelledby="about">
+          <h3 id="about">What is Wikipedia?</h3>
+          <div class="two-col">
+            <p>Wikipedia is a free, collaboratively edited encyclopedia supported by the non‑profit Wikimedia Foundation. Millions of volunteers write and improve articles every day.</p>
+            <p>Anyone can edit. Start with a topic you know, add sources, and help make knowledge available to everyone.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <footer role="contentinfo" class="container">
+      <p>This is a student redesign concept focused on readability and accessibility. Not affiliated with Wikimedia Foundation.</p>
+    </footer>
+
+    <style>
+      /* Utility: visually hidden label class */
+      .vis{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+      /* Two-column content for the About panel on wide screens */
+      .two-col{ display:grid; grid-template-columns: 1fr; gap:12px; }
+      @media (min-width: 900px){ .two-col{ grid-template-columns: 1fr 1fr; } }
+    </style>
+    <script>
+      (function(){
+        const root = document.documentElement;
+        const btn = document.getElementById('theme-toggle');
+        const saved = localStorage.getItem('theme');
+        if(saved === 'dark' || saved === 'light'){
+          root.setAttribute('data-theme', saved);
+          if(btn) btn.setAttribute('aria-pressed', String(saved === 'dark'));
+          if(btn) btn.textContent = saved === 'dark' ? 'Light mode' : 'Dark mode';
+        }
+        if(btn){
+          btn.addEventListener('click', () => {
+            const isDark = root.getAttribute('data-theme') === 'dark' || (!root.hasAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const next = isDark ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            btn.setAttribute('aria-pressed', String(next === 'dark'));
+            btn.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';
+          });
+        }
+      })();
+    </script>
+  </body>
+  </html>
